@@ -180,7 +180,7 @@ public class World implements IBlockContainer {
 	 */
 	public File save() throws IOException {
 		String myDocuments = FileSystemView.getFileSystemView().getDefaultDirectory().getPath();
-		File worldDir = new File(myDocuments + "\\" + "ANS Hackhathon 2022 Map Generator");
+		File worldDir = new File("C:\\Users\\ANS Hackathon 2022\\AppData\\Roaming\\.minecraft\\saves");
 		if(!dirExists(worldDir)) {
 			worldDir.mkdir();
 		}
