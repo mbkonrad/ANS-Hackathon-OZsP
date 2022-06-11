@@ -24,9 +24,7 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import net.morbz.minecraft.blocks.DoorBlock;
-import net.morbz.minecraft.blocks.Material;
-import net.morbz.minecraft.blocks.SimpleBlock;
+import net.morbz.minecraft.blocks.*;
 import net.morbz.minecraft.blocks.states.Facing4State;
 import net.morbz.minecraft.level.FlatGenerator;
 import net.morbz.minecraft.level.GameType;
@@ -137,6 +135,7 @@ public class ExportService extends Service<Void> {
         return new Task<Void>() {
             @Override
             protected Void call() throws Exception {
+                double xmax=0,xmin=0,ymax=0,ymin=0,zmax=0,zmin=0;
                 Platform.runLater(
                         () -> {
                             setCurrentWork("Start");
@@ -164,13 +163,12 @@ public class ExportService extends Service<Void> {
                         );
 
                         // pomijamy naglowek
-
+                        int count=0;
                         bufferedReader.readLine();
                         while ((row = bufferedReader.readLine()) != null) {
                             if (!currentState) return null;
 
                             try {
-
 
                                 String[] pointArray = new String[10];
                                 pointArray = row.split(",");
@@ -182,9 +180,30 @@ public class ExportService extends Service<Void> {
                                 point3d.r = Integer.parseInt(pointArray[3]);    // Red
                                 point3d.g = Integer.parseInt(pointArray[4]);    // Green
                                 point3d.b = Integer.parseInt(pointArray[5]);    // Blue
-                                point3d.c = Double.parseDouble(pointArray[9]);  // classification
+                                point3d.c = Double.parseDouble(pointArray[9]);// classification
+                                if(point3d.c==7)
+                                {
+                                    continue;
+                                }
+                                if(point3d.x<xmin) xmin=point3d.x;
+                                if(point3d.x>xmax) xmax=point3d.x;
+                                if(point3d.y<ymin) ymin=point3d.y;
+                                if(point3d.y>ymax) ymax=point3d.y;
+                                if(point3d.z<zmin) zmin=point3d.z;
+                                if(point3d.z>zmax) zmax=point3d.z;
+
                                 points3dList.add(point3d);
 
+                                if(count==0)
+                                {
+                                    ymin=point3d.y;
+                                    ymax=point3d.y;
+                                    xmin=point3d.x;
+                                    xmax=point3d.x;
+                                    zmin=point3d.z;
+                                    zmax=point3d.z;
+                                    count++;
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -193,6 +212,15 @@ public class ExportService extends Service<Void> {
                             updateProgress(counter, max);
                         }
 
+                    }
+                    for(Point3d pkt:points3dList)
+                    {
+                        pkt.x-=xmin;
+                        pkt.x=Math.round(pkt.x);
+                        pkt.y-=ymin;
+                        pkt.y=Math.round(pkt.y);
+                        pkt.z=pkt.z-zmin+21;
+                        pkt.z=Math.round(pkt.z);
                     }
                     System.out.println("Prawidlowych pkt: " + points3dList.size());
 
@@ -208,6 +236,28 @@ public class ExportService extends Service<Void> {
                                 setCurrentWork("2 z 4: zadanie");
                             }
                     );
+                    for(Point3d pkt: points3dList)
+                    {
+                        List<Double> classif = new ArrayList<Double>();
+                        classif.add(pkt.c);
+                        for(int i=points3dList.indexOf(pkt)+1;i<points3dList.size();i++)
+                        {
+                            Point3d temp = points3dList.get(i);
+                            if(temp.x==pkt.x && temp.y==pkt.y && temp.z==pkt.z)
+                            {
+                                classif.add(temp.c);
+                                points3dList.remove(i);
+                                i--;
+                            }
+                        }
+
+                    }
+                    System.out.println(xmin);
+                    System.out.println(xmax);
+                    System.out.println(ymin);
+                    System.out.println(ymax);
+                    System.out.println(zmin);
+                    System.out.println(zmax);
 
                     /// zadanie
 
@@ -262,12 +312,28 @@ public class ExportService extends Service<Void> {
                     for (int x = 0; x < 400; x++) {
                         for (int z = 0; z < 400; z++) {
                             // Set glass
-                            for (int y = 0; y < 20; y++) {
+                            for (int y = 1; y < 20; y++) {
                                 world.setBlock(x, y, z, SimpleBlock.GLASS);
                             }
                             // Set grass
                             world.setBlock(x, 20, z, SimpleBlock.GLASS_PANE);
+                            world.setBlock(x,(int)zmin+23,z,new StainedBlock(StainedBlock.StainedMaterial.WOOL,StainedBlock.StainedColor.LIGHT_BLUE));
+                            
+
+
                         }
+                    }
+                    for(Point3d pkt:points3dList)
+                    {
+                        if(pkt.c==9) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, StainedBlock.StainedColor.LIGHT_BLUE));
+                        else if(pkt.c==8) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, StainedBlock.StainedColor.RED));
+                        else if(pkt.c==7) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, StainedBlock.StainedColor.BLACK));
+                        else if(pkt.c==6) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, StainedBlock.StainedColor.LIGHT_GRAY));
+                        else if(pkt.c==5) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, StainedBlock.StainedColor.GREEN));
+                        else if(pkt.c==4) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, StainedBlock.StainedColor.LIME));
+                        else if(pkt.c==3) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, SimpleBlock.GRASS);
+                        else if(pkt.c==2) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, DirtBlock.DIRT);
+                        else world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, SimpleBlock.BEDROCK);
                     }
 
                     // przykład tworzenia drzwi
