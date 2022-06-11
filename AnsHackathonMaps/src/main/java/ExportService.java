@@ -32,6 +32,7 @@ import net.morbz.minecraft.level.IGenerator;
 import net.morbz.minecraft.level.Level;
 import net.morbz.minecraft.world.DefaultLayers;
 import net.morbz.minecraft.world.World;
+import java.awt.Color.*;
 
 public class ExportService extends Service<Void> {
 
@@ -363,28 +364,44 @@ public class ExportService extends Service<Void> {
                 int[] lgray={170,170,170};
                 int[] white={255,255,255};
                 int[] red={255,0,0};
-                int[] green={0,255,0};
-                int[] blue={0,0,255};
                 int[] brown={163,43,43};
                 int[] orange={255,123,0};
-                int[] cyan={0,255,255};
                 int[] yellow={255,255,0};
-                int[] lime={123,255,0};
-                int[] magenta={255,0,255};
-                int[] pink={255,60,180};
-                int[] lblue={123,160,255};
-                int[] purple={123,0,255};
+
+                //int[] cyan={0,255,255};
+                //int[] green={0,255,0};
+                //int[] blue={0,0,255};
+                //int[] lime={123,255,0};
+                //int[] magenta={255,0,255};
+                //int[] pink={255,60,180};
+                //int[] lblue={123,160,255};
+                //int[] purple={123,0,255};
                 int[][] colors={
                         black,gray,lgray,white,
-                        red,green,blue,brown,orange,cyan,yellow,lime,magenta,pink,lblue,purple};
+                        red,brown,orange,yellow};
+
+                for(int[] color: colors){
+                    float[] hsv=new float[3];
+                    java.awt.Color.RGBtoHSB(color[0],color[1],color[2],hsv);
+                    java.awt.Color rgb=new java.awt.Color(java.awt.Color.HSBtoRGB(hsv[0],hsv[1]*0.3f,hsv[2]));
+                    color[2]=rgb.getBlue();
+                    color[1]=rgb.getGreen();
+                    color[0]=rgb.getRed();
+                }
 
                 double d=Double.MAX_VALUE;
                 int[] closest=null;
                 for(int[] color : colors)
                 {
-                    //int[] HSBvals=null;
-                    //int[] colorHSB=Color.
-                    double dist=Math.abs((color[0]-r))+Math.abs((color[1]-g))+Math.abs((color[2]-b));
+                    //float[] hsv=new float[3];
+                    //java.awt.Color.RGBtoHSB(r,g,b,hsv);
+                    //int col=java.awt.Color.HSBtoRGB(hsv[0],hsv[1]+0.15f,hsv[2]);
+                    //r=col%256+255;
+                    //g=(col/256)%256+255;
+                    //b=(col/256/256)%256+255;
+                    //System.out.printf("%d, %d, %d",color[0],color[1],color[2]);
+                    //color=java.awt.Color.HSBtoRGB(hsv[0],hsv[1]+0.5f,hsv[2]);
+                    double dist=Math.abs((color[0]-r)^2)+Math.abs((color[1]-g)^2)+Math.abs((color[2]-b)^2);
                     if (dist<d){
                         d=dist;
                         closest= color;
@@ -402,29 +419,35 @@ public class ExportService extends Service<Void> {
                 else
                     if (closest==red) {
                     return StainedBlock.StainedColor.RED;
-                } else if (closest==blue) {
-                    return StainedBlock.StainedColor.BLUE;
-                } else if (closest==green) {
-                    return StainedBlock.StainedColor.GREEN;
-                } else if (closest==brown) {
+                }
+                //    else if (closest==blue) {
+                //    return StainedBlock.StainedColor.BLUE;
+                //}
+                //    else if (closest==green) {
+                //    return StainedBlock.StainedColor.GREEN;
+                //}
+                else if (closest==brown) {
                     return StainedBlock.StainedColor.BROWN;
                 } else if (closest==orange) {
                     return StainedBlock.StainedColor.ORANGE;
                 } else if (closest==yellow) {
                     return StainedBlock.StainedColor.YELLOW;
-                } else if(closest==cyan){
-                    return StainedBlock.StainedColor.CYAN;
-                } else if (closest==lime) {
-                    return StainedBlock.StainedColor.LIME;
-                } else if (closest==magenta) {
-                    return StainedBlock.StainedColor.MAGENTA;
-                }else if (closest==lblue){
-                    return StainedBlock.StainedColor.LIGHT_BLUE;
-                } else if (closest==pink) {
-                    return StainedBlock.StainedColor.PINK;
-                } else if (closest==purple) {
-                    return StainedBlock.StainedColor.PURPLE;
-                }else return StainedBlock.StainedColor.PINK;
+                }
+                //else if(closest==cyan){
+                //    return StainedBlock.StainedColor.CYAN;
+                //}
+                //else if (closest==lime) {
+                //    return StainedBlock.StainedColor.LIME;
+                //} else if (closest==magenta) {
+                //    return StainedBlock.StainedColor.MAGENTA;
+                //}else if (closest==lblue){
+                //    return StainedBlock.StainedColor.LIGHT_BLUE;
+                //} else if (closest==pink) {
+                 //   return StainedBlock.StainedColor.PINK;
+                //} else if (closest==purple) {
+                 //   return StainedBlock.StainedColor.PURPLE;
+                //}
+                else return StainedBlock.StainedColor.PINK;
 
 
         //if(r<63) return StainedBlock.StainedColor.;
