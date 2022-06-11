@@ -309,8 +309,8 @@ public class ExportService extends Service<Void> {
                     // Create a huge structure of glass that has an area of 100x100 blocks and is 50 blocks height.
                     // On top of the glass structure we have a layer of grass.
                     level.setSpawnPoint(50, 20 + 1, 50);
-                    for (int x = 0; x < 400; x++) {
-                        for (int z = 0; z < 400; z++) {
+                    for (int x = 0; x < 1600; x++) {
+                        for (int z = 0; z < 1600; z++) {
                             // Set glass
                             for (int y = 1; y < 20; y++) {
                                 world.setBlock(x, y, z, SimpleBlock.GLASS);
@@ -319,8 +319,6 @@ public class ExportService extends Service<Void> {
                             world.setBlock(x, 20, z, SimpleBlock.GLASS_PANE);
                             world.setBlock(x,(int)zmin+23,z,new StainedBlock(StainedBlock.StainedMaterial.WOOL,StainedBlock.StainedColor.LIGHT_BLUE));
 
-
-
                         }
                     }
                     for(Point3d pkt:points3dList)
@@ -328,7 +326,11 @@ public class ExportService extends Service<Void> {
                         if(pkt.c==9) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, StainedBlock.StainedColor.LIGHT_BLUE));
                         else if(pkt.c==8) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, StainedBlock.StainedColor.RED));
                         else if(pkt.c==7) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, StainedBlock.StainedColor.BLACK));
-                        else if(pkt.c==6) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, Kolor(pkt.r, pkt.g, pkt.b)));
+                        else if(pkt.c==6){
+                            for(int z=(int)pkt.z;z>20;z--){
+                                world.setBlock((int)pkt.x,z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, Kolor(pkt.r, pkt.g, pkt.b)));
+                            }
+                        }
                         else if(pkt.c==5) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, StainedBlock.StainedColor.GREEN));
                         else if(pkt.c==4) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, StainedBlock.StainedColor.LIME));
                         else if(pkt.c==3) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, SimpleBlock.GRASS);
@@ -372,13 +374,17 @@ public class ExportService extends Service<Void> {
                 int[] pink={255,60,180};
                 int[] lblue={123,160,255};
                 int[] purple={123,0,255};
-                int[][] colors={black,gray,lgray,white,red,green,blue,brown,orange,cyan,yellow,lime,magenta,pink,lblue,purple};
+                int[][] colors={
+                        black,gray,lgray,white,
+                        red,green,blue,brown,orange,cyan,yellow,lime,magenta,pink,lblue,purple};
 
-                int d=Integer.MAX_VALUE;
+                double d=Double.MAX_VALUE;
                 int[] closest=null;
                 for(int[] color : colors)
                 {
-                    int dist=Math.abs(color[0]-r)+Math.abs(color[1]-g)+Math.abs(color[2]-b);
+                    //int[] HSBvals=null;
+                    //int[] colorHSB=Color.
+                    double dist=Math.abs((color[0]-r))+Math.abs((color[1]-g))+Math.abs((color[2]-b));
                     if (dist<d){
                         d=dist;
                         closest= color;
@@ -392,7 +398,9 @@ public class ExportService extends Service<Void> {
                     return StainedBlock.StainedColor.LIGHT_GRAY;
                 } else if (closest==white) {
                     return StainedBlock.StainedColor.WHITE;
-                } else if (closest==red) {
+                }
+                else
+                    if (closest==red) {
                     return StainedBlock.StainedColor.RED;
                 } else if (closest==blue) {
                     return StainedBlock.StainedColor.BLUE;
@@ -416,7 +424,7 @@ public class ExportService extends Service<Void> {
                     return StainedBlock.StainedColor.PINK;
                 } else if (closest==purple) {
                     return StainedBlock.StainedColor.PURPLE;
-                }else return StainedBlock.StainedColor.LIGHT_GRAY;
+                }else return StainedBlock.StainedColor.PINK;
 
 
         //if(r<63) return StainedBlock.StainedColor.;
