@@ -182,7 +182,7 @@ public class ExportService extends Service<Void> {
                                 point3d.g = Integer.parseInt(pointArray[4]);    // Green
                                 point3d.b = Integer.parseInt(pointArray[5]);    // Blue
                                 point3d.c = Double.parseDouble(pointArray[9]);// classification
-                                if(point3d.c==7)
+                                if(point3d.c==7 || point3d.c>9)
                                 {
                                     continue;
                                 }
@@ -276,7 +276,27 @@ public class ExportService extends Service<Void> {
                     );
 
                     //zadanie
-
+                    for(Point3d x:points3dList)
+                    {
+                        if(x.c<2)
+                        {
+                            switch(Kolor(x.r,x.g,x.b))
+                            {
+                                case GREEN:
+                                    x.c=5;
+                                    break;
+                                case LIME:
+                                    x.c=4;
+                                    break;
+                                case LIGHT_BLUE:
+                                    x.c=9;
+                                    break;
+                                default:
+                                    x.c=6;
+                                    break;
+                            }
+                        }
+                    }
 
 
 
