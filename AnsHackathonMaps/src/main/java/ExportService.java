@@ -176,7 +176,7 @@ public class ExportService extends Service<Void> {
 
                                 Point3d point3d = new Point3d();
                                 point3d.x = Double.parseDouble(pointArray[0]);  // x
-                                point3d.y = Double.parseDouble(pointArray[1]);  // y
+                                point3d.y = -1*Double.parseDouble(pointArray[1]);  // y
                                 point3d.z = Double.parseDouble(pointArray[2]);  // z
                                 point3d.r = Integer.parseInt(pointArray[3]);    // Red
                                 point3d.g = Integer.parseInt(pointArray[4]);    // Green
