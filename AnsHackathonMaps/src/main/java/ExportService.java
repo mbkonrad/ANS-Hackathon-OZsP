@@ -342,11 +342,13 @@ public class ExportService extends Service<Void> {
 
                         }
                     }
+
                     for(Point3d pkt:points3dList)
                     {
+
                         if(pkt.c==9) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, StainedBlock.StainedColor.LIGHT_BLUE));
-                        else if(pkt.c==8) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, StainedBlock.StainedColor.RED));
-                        else if(pkt.c==7) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, StainedBlock.StainedColor.BLACK));
+                        //else if(pkt.c==8) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, StainedBlock.StainedColor.RED));
+                        //else if(pkt.c==7) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, StainedBlock.StainedColor.BLACK));
                         else if(pkt.c==6){
 
                                 world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, Kolor(pkt.r, pkt.g, pkt.b)));
@@ -398,7 +400,7 @@ public class ExportService extends Service<Void> {
                 //int[] purple={123,0,255};
                 int[][] colors={
                         black,gray,lgray,white,
-                        red,brown,orange,yellow};
+                        red,brown,yellow};
 
                 for(int[] color: colors){
                     float[] hsv=new float[3];
@@ -421,7 +423,7 @@ public class ExportService extends Service<Void> {
                     //b=(col/256/256)%256+255;
                     //System.out.printf("%d, %d, %d",color[0],color[1],color[2]);
                     //color=java.awt.Color.HSBtoRGB(hsv[0],hsv[1]+0.5f,hsv[2]);
-                    double dist=Math.abs((color[0]-r)^2)+Math.abs((color[1]-g)^2)+Math.abs((color[2]-b)^2);
+                    double dist=Math.abs((color[0]-r))+Math.abs((color[1]-g))+Math.abs((color[2]-b));
                     if (dist<d){
                         d=dist;
                         closest= color;
@@ -448,9 +450,11 @@ public class ExportService extends Service<Void> {
                 //}
                 else if (closest==brown) {
                     return StainedBlock.StainedColor.BROWN;
-                } else if (closest==orange) {
-                    return StainedBlock.StainedColor.ORANGE;
-                } else if (closest==yellow) {
+                }
+                //else if (closest==orange) {
+                //    return StainedBlock.StainedColor.ORANGE;
+                //}
+                else if (closest==yellow) {
                     return StainedBlock.StainedColor.YELLOW;
                 }
                 //else if(closest==cyan){
