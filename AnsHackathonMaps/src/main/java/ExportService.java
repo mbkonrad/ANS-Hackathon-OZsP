@@ -348,9 +348,9 @@ public class ExportService extends Service<Void> {
                         else if(pkt.c==8) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, StainedBlock.StainedColor.RED));
                         else if(pkt.c==7) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, StainedBlock.StainedColor.BLACK));
                         else if(pkt.c==6){
-                            for(int z=(int)pkt.z;z>20;z--){
-                                world.setBlock((int)pkt.x,z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, Kolor(pkt.r, pkt.g, pkt.b)));
-                            }
+
+                                world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, Kolor(pkt.r, pkt.g, pkt.b)));
+
                         }
                         else if(pkt.c==5) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, StainedBlock.StainedColor.GREEN));
                         else if(pkt.c==4) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, StainedBlock.StainedColor.LIME));
