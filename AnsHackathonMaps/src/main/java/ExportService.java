@@ -318,7 +318,7 @@ public class ExportService extends Service<Void> {
                             // Set grass
                             world.setBlock(x, 20, z, SimpleBlock.GLASS_PANE);
                             world.setBlock(x,(int)zmin+23,z,new StainedBlock(StainedBlock.StainedMaterial.WOOL,StainedBlock.StainedColor.LIGHT_BLUE));
-                            
+
 
 
                         }
@@ -328,7 +328,7 @@ public class ExportService extends Service<Void> {
                         if(pkt.c==9) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, StainedBlock.StainedColor.LIGHT_BLUE));
                         else if(pkt.c==8) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, StainedBlock.StainedColor.RED));
                         else if(pkt.c==7) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, StainedBlock.StainedColor.BLACK));
-                        else if(pkt.c==6) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, StainedBlock.StainedColor.LIGHT_GRAY));
+                        else if(pkt.c==6) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, Kolor(pkt.r, pkt.g, pkt.b)));
                         else if(pkt.c==5) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, StainedBlock.StainedColor.GREEN));
                         else if(pkt.c==4) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, new StainedBlock(StainedBlock.StainedMaterial.WOOL, StainedBlock.StainedColor.LIME));
                         else if(pkt.c==3) world.setBlock((int)pkt.x,(int)pkt.z,(int)pkt.y, SimpleBlock.GRASS);
@@ -354,7 +354,76 @@ public class ExportService extends Service<Void> {
                 );
                 return null;
             }
+    StainedBlock.StainedColor Kolor(int r,int g,int b){
 
+                int[] black={0,0,0};
+                int[] gray={85,85,85};
+                int[] lgray={170,170,170};
+                int[] white={255,255,255};
+                int[] red={255,0,0};
+                int[] green={0,255,0};
+                int[] blue={0,0,255};
+                int[] brown={163,43,43};
+                int[] orange={255,123,0};
+                int[] cyan={0,255,255};
+                int[] yellow={255,255,0};
+                int[] lime={123,255,0};
+                int[] magenta={255,0,255};
+                int[] pink={255,60,180};
+                int[] lblue={123,160,255};
+                int[] purple={123,0,255};
+                int[][] colors={black,gray,lgray,white,red,green,blue,brown,orange,cyan,yellow,lime,magenta,pink,lblue,purple};
+
+                int d=Integer.MAX_VALUE;
+                int[] closest=null;
+                for(int[] color : colors)
+                {
+                    int dist=Math.abs(color[0]-r)+Math.abs(color[1]-g)+Math.abs(color[2]-b);
+                    if (dist<d){
+                        d=dist;
+                        closest= color;
+                    }
+                }
+                if(closest==black){
+                    return StainedBlock.StainedColor.BLACK;
+                } else if (closest==gray) {
+                    return StainedBlock.StainedColor.GRAY;
+                } else if (closest==lgray) {
+                    return StainedBlock.StainedColor.LIGHT_GRAY;
+                } else if (closest==white) {
+                    return StainedBlock.StainedColor.WHITE;
+                } else if (closest==red) {
+                    return StainedBlock.StainedColor.RED;
+                } else if (closest==blue) {
+                    return StainedBlock.StainedColor.BLUE;
+                } else if (closest==green) {
+                    return StainedBlock.StainedColor.GREEN;
+                } else if (closest==brown) {
+                    return StainedBlock.StainedColor.BROWN;
+                } else if (closest==orange) {
+                    return StainedBlock.StainedColor.ORANGE;
+                } else if (closest==yellow) {
+                    return StainedBlock.StainedColor.YELLOW;
+                } else if(closest==cyan){
+                    return StainedBlock.StainedColor.CYAN;
+                } else if (closest==lime) {
+                    return StainedBlock.StainedColor.LIME;
+                } else if (closest==magenta) {
+                    return StainedBlock.StainedColor.MAGENTA;
+                }else if (closest==lblue){
+                    return StainedBlock.StainedColor.LIGHT_BLUE;
+                } else if (closest==pink) {
+                    return StainedBlock.StainedColor.PINK;
+                } else if (closest==purple) {
+                    return StainedBlock.StainedColor.PURPLE;
+                }else return StainedBlock.StainedColor.LIGHT_GRAY;
+
+
+        //if(r<63) return StainedBlock.StainedColor.;
+                //else if(r<126) return StainedBlock.StainedColor.GRAY;
+                //else if(r<189) return StainedBlock.StainedColor.LIGHT_GRAY;
+                //else return StainedBlock.StainedColor.WHITE;
+    }
 
 
         };
